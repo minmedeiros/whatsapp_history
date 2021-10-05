@@ -38,17 +38,25 @@ print(conversation.date)
 # Group conversation by day
 conversation.date = pd.to_datetime(conversation.date, errors='coerce', dayfirst=True, format='%d/%m/%Y')
 conversation_day = conversation.groupby(pd.Grouper(key='date', freq='1D')).sum()
-conversation_day.index = conversation_day.index.strftime('%B')
+conversation_day.index = conversation_day.index.strftime('%B/%Y')
 
 # Group conversation by month
 conversation_month = conversation.groupby(pd.Grouper(key='date', freq='1M')).sum()
-conversation_month.index = conversation_month.index.strftime('%B')
+conversation_month.index = conversation_month.index.strftime('%B/%Y')
 
 # Plot images
-conversation_day.plot()
+conversation_day.plot(title='Daily number of messages in Whatsapp history', legend=False, grid=True)
+[xmin, xmax, ymin, ymax] = plt.axis()
+plt.axis([0, xmax, ymin, ymax])
+plt.locator_params(axis='x', nbins=10)
+plt.xticks(rotation=20)
 plt.savefig(file+'_daily.png')
 plt.show()
 
-conversation_month.plot()
+conversation_month.plot(title='Monthly number of messages in Whatsapp history', legend=False, grid=True)
+[xmin, xmax, ymin, ymax] = plt.axis()
+plt.axis([0, xmax, ymin, ymax])
+plt.locator_params(axis='x', nbins=5)
+plt.xticks(rotation=20)
 plt.savefig(file+'_monthly.png')
 plt.show()
